@@ -1,0 +1,16 @@
+{
+  "name": "AutoRefresher",
+  "version": "1.0.0",
+  "description": "App which help to maintain the session",
+  "manifest_version": 3,
+  "author": "Nantha",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Resume the Session"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": ["storage", "tabs", "activeTab", "alarms"]
+}
