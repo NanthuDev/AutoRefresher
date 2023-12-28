@@ -43,18 +43,7 @@ async function handleStart(reloadInterval) {
 
 const startReload = (values) => {
   console.log("vall", values);
-  chrome.storage.local.set(values);
-  chrome.tabs.query(
-    { active: true, currentWindow: true },
-    async function (tab) {
-      console.log("hai", tab);
-      if (tab[0].id) {
-        chrome.storage.local.set(values);
-
-        chrome.tabs.reload(tab[0].id);
-      }
-    }
-  );
+  chrome.storage.local.set(values);  
   ReloadInterval(values, "start");
 };
 const stopReload = () => {
@@ -65,15 +54,10 @@ let interval;
 
 const ReloadInterval = (values, event) => {
   timer = setInterval(() => {
-    chrome.tabs.query(
-      { active: true, currentWindow: true },
-      async function (tab) {
-        console.log("hai", tab);
-        if (tab[0].id) {
-          chrome.tabs.reload(tab[0].id);
-        }
-      }
-    );
+ 
+          chrome.tabs.reload(values.tabId);
+
+        
   }, values.timerValueMS * 1000);
 };
 
