@@ -1,34 +1,33 @@
 console.log("haii from bg");
-
+var timer = null;
 chrome.runtime.onMessage.addListener((data) => {
   const { event, values } = data;
 
-  switch(event){
-    case 'onStart':
-        handleStart(values);
-        break;
-    case 'onStop':
-        handleStop();
-        break;
+  switch (event) {
+    case "onStart":
+      startReload(values);
+      break;
+    case "onStop":
+      stopReload();
+      break;
     default:
-        break;
+      break;
   }
 });
 
-
-async function handleStop(){
-    stopAlarm();
+async function handleStop() {
+  stopAlarm();
 }
 
 async function handleStart(reloadInterval) {
-    console.log("hai", reloadInterval.timerValueMS);
+  console.log("hai", reloadInterval.timerValueMS);
 
   reloadInterval = parseInt(reloadInterval.timerValueMS);
 
   if (reloadInterval && typeof reloadInterval === "number") {
     reloadInterval = reloadInterval * 1000;
     console.log("hai", reloadInterval);
-     createAlarm();
+    createAlarm();
     // setInterval(() => {
     //   chrome.tabs.query(
     //     { active: true, currentWindow: true },
@@ -42,16 +41,54 @@ async function handleStart(reloadInterval) {
   }
 }
 
+const startReload = (values) => {
+  console.log("vall", values);
+  chrome.storage.local.set(values);
+  chrome.tabs.query(
+    { active: true, currentWindow: true },
+    async function (tab) {
+      console.log("hai", tab);
+      if (tab[0].id) {
+        chrome.storage.local.set(values);
 
+        chrome.tabs.reload(tab[0].id);
+      }
+    }
+  );
+  ReloadInterval(values, "start");
+};
+const stopReload = () => {
+  console.log("Stop it plz");
+  clearInterval(timer);
+};
+let interval;
+
+const ReloadInterval = (values, event) => {
+  timer = setInterval(() => {
+    chrome.tabs.query(
+      { active: true, currentWindow: true },
+      async function (tab) {
+        console.log("hai", tab);
+        if (tab[0].id) {
+          chrome.tabs.reload(tab[0].id);
+        }
+      }
+    );
+  }, values.timerValueMS * 1000);
+};
 
 const ALARM_JOB_REFRESHER = "CREATE_TIMER";
 async function createAlarm() {
-    console.log("Calling create alarms....")
-  chrome.alarms.create(ALARM_JOB_REFRESHER, { periodInMinutes: 1.0 });
+  console.log("Calling create alarms....");
+  chrome.alarms.get(ALARM_JOB_REFRESHER, (alarmExist) => {
+    if (!alarmExist) {
+      chrome.alarms.create(ALARM_JOB_REFRESHER, { periodInSeconds: 1.0 });
+    }
+  });
 }
 
 async function stopAlarm() {
-    console.log("Calling Stop alarms....")
+  console.log("Calling Stop alarms....");
 
   chrome.alarms.clearAll();
 }
