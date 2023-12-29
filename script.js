@@ -9,8 +9,7 @@ reloadStart.onclick = () => {
   chrome.tabs.query(
     { active: true, currentWindow: true },
     async function (tab) {
-      console.log("hai", tab);
-      if (tab[0].id) {
+       if (tab[0].id) {
         values.tabId = tab[0].id;
         chrome.runtime.sendMessage({ event: "onStart", values });
       }
