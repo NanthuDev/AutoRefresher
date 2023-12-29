@@ -1,7 +1,6 @@
 var timer = null;
 chrome.runtime.onMessage.addListener((data) => {
-  const { event, values } = data;
-
+  const { event, values } = data; 
   switch (event) {
     case "onStart":
       startReload(values);
