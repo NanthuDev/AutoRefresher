@@ -1,6 +1,6 @@
 var timer = null;
 chrome.runtime.onMessage.addListener((data) => {
-  const { event, values } = data; 
+  const { event, values } = data;
   switch (event) {
     case "onStart":
       startReload(values);
@@ -14,12 +14,11 @@ chrome.runtime.onMessage.addListener((data) => {
 });
 
 const startReload = (values) => {
-  console.log("vall", values);
   chrome.storage.local.set(values);
   ReloadInterval(values, "start");
 };
 const stopReload = () => {
-   clearInterval(timer);
+  clearInterval(timer);
 };
 let interval;
 
