@@ -3,15 +3,22 @@ const timerValue = document.getElementById("refresh_timer");
 const stopTimer = document.getElementById("stopApp");
 const timerStatus = document.getElementById("status");
 
+chrome.tabs.query({ active: true, currentWindow: true }, async function (tab) {
+  console.log(tab);
+
+  if (tab[0].id) {
+    console.log(tab[0].id);
+  }
+});
+
 reloadStart.onclick = () => {
-  const values = {
-    timerValueMS: timerValue.value,
-  };
   chrome.tabs.query(
     { active: true, currentWindow: true },
     async function (tab) {
       if (tab[0].id) {
-        values.tabId = tab[0].id;
+        let values = {
+          [tab[0].url]: { ...tab[0], timerValueMS: timerValue.value },
+        };
         chrome.runtime.sendMessage({ event: "onStart", values });
         timerStatus.style.display = "unset";
       }
@@ -19,15 +26,21 @@ reloadStart.onclick = () => {
   );
 };
 
-chrome.storage.local.get(["timerValueMS"], (values) => {
-  const { timerValueMS } = values;
-  if (timerValue.value) {
-    timerValue.value = timerValueMS;
-    timerStatus.style.display = "unset";
-  } else {
-    timerValue.value = 5;
-  }
-});
+const starter = () => {
+  chrome.storage.local.get(["timerValueMS", "tabId"], (values) => {
+    console.log(values);
+    const { timerValueMS } = values;
+
+    if (timerValueMS) {
+      timerValue.value = timerValueMS;
+      chrome.runtime.sendMessage({ event: "onStart", values });
+      timerStatus.style.display = "unset";
+    } else {
+      timerValue.value = 5;
+    }
+  });
+};
+starter();
 stopTimer.onclick = () => {
   chrome.runtime.sendMessage({ event: "onStop" });
   chrome.storage.local.clear((result) => {
