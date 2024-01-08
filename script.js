@@ -17,7 +17,10 @@ reloadStart.onclick = () => {
     async function (tab) {
       if (tab[0].id) {
         let values = {
-          [tab[0].url]: { ...tab[0], timerValueMS: timerValue.value },
+          tabInfo:{
+            [tab[0].url]: { ...tab[0], timerValueMS: timerValue.value }
+          } ,
+          key:tab[0].url
         };
         chrome.runtime.sendMessage({ event: "onStart", values });
         timerStatus.style.display = "unset";
