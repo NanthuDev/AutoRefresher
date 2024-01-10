@@ -2,6 +2,15 @@ const reloadStart = document.getElementById("setupReload");
 const timerValue = document.getElementById("refresh_timer");
 const stopTimer = document.getElementById("stopApp");
 const timerStatus = document.getElementById("status");
+//intial default
+// get the value
+//store based on the url
+// start reloader
+//close the browser
+//start the url again
+//initiate the values 
+//bsed on the url, start the reloader with proper timeer
+//kill switch
 
 chrome.tabs.query({ active: true, currentWindow: true }, async function (tab) {
   console.log(tab);
