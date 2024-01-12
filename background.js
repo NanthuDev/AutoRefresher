@@ -40,7 +40,7 @@ const dataProcessor = (inputs,key) => {
       console.log("final",tabInfo[item][key])
       if(tabInfo[item][key]){
         console.log("returned",Number(item).isFinite)
-        return item;
+        return [item];
       }
   });
   console.log("exits",exists[0]) 
