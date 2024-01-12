@@ -39,9 +39,20 @@ reloadStart.onclick = () => {
 };
 
 const starter = () => {
-  chrome.storage.local.get(["timerValueMS", "tabId"], (values) => {
-    console.log(values);
-    const { timerValueMS } = values;
+  chrome.storage.local.get(["tabInfo"], (values) => {
+    console.log("tabindo", values);
+    chrome.tabs.query(
+      { active: true, currentWindow: true },
+      async function (tab) {
+        if (tab[0].id) {
+          let storedTab = values.tabInfo.filter((item) => {
+            if (item[tab[0].url]) return true;
+            return false;
+          });
+          console.log("Valless",storedTab);
+          if(storedTab.length === 1){
+            timerStatus.style.display = "unset";
+          }
 
         }
       }
