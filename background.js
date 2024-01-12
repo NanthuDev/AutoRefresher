@@ -37,10 +37,9 @@ const dataProcessor = (inputs,key) => {
     //Zero index issue
     let exists = [...tabInfo.keys()].filter(item=>{
       console.log("teem",tabInfo[item],item,key);
-      console.log("final",tabInfo[item][key])
+      // console.log("final",tabInfo[item][key])
       if(tabInfo[item][key]){
-        console.log("returned",Number(item).isFinite)
-        return [item];
+         return [item];
       }
   });
   console.log("exits",exists[0]) 

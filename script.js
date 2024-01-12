@@ -8,7 +8,7 @@ const timerStatus = document.getElementById("status");
 // start reloader
 //close the browser
 //start the url again
-//initiate the values 
+//initiate the values
 //bsed on the url, start the reloader with proper timeer
 //kill switch
 
@@ -26,10 +26,10 @@ reloadStart.onclick = () => {
     async function (tab) {
       if (tab[0].id) {
         let values = {
-          tabInfo:{
-            [tab[0].url]: { ...tab[0], timerValueMS: timerValue.value }
-          } ,
-          key:tab[0].url
+          tabInfo: {
+            [tab[0].url]: { ...tab[0], timerValueMS: timerValue.value },
+          },
+          key: tab[0].url,
         };
         chrome.runtime.sendMessage({ event: "onStart", values });
         timerStatus.style.display = "unset";
@@ -43,13 +43,19 @@ const starter = () => {
     console.log(values);
     const { timerValueMS } = values;
 
-    if (timerValueMS) {
-      timerValue.value = timerValueMS;
-      chrome.runtime.sendMessage({ event: "onStart", values });
-      timerStatus.style.display = "unset";
-    } else {
-      timerValue.value = 5;
-    }
+        }
+      }
+    );
+
+    // const { timerValueMS } = values;
+
+    // if (timerValueMS) {
+    //   timerValue.value = timerValueMS;
+    //   chrome.runtime.sendMessage({ event: "onStart", values });
+    //   timerStatus.style.display = "unset";
+    // } else {
+    //   timerValue.value = 5;
+    // }
   });
 };
 starter();
