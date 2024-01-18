@@ -1,9 +1,10 @@
 var timer = null;
 chrome.runtime.onMessage.addListener((data) => {
-  const { event, values } = data;
+  const { event, values,key } = data;
+  console.log("hhjhj",event,values,key)
   switch (event) {
     case "onStart":
-      startReload(values);
+      startReload(values,key);
       break;
     case "onStop":
       stopReload();
@@ -13,10 +14,10 @@ chrome.runtime.onMessage.addListener((data) => {
   }
 });
 
-const startReload = (values) => {
-  console.log("valuu", values);
-  dataProcessor(values.tabInfo,values.key);
-  //  ReloadInterval(values, "start");
+const startReload = (values,key) => {
+  console.log("valuu", values.tabInfo[key]);
+  dataProcessor(values,key);
+   ReloadInterval(values.tabInfo[key], "start");
 };
 const stopReload = () => {
   clearInterval(timer);
@@ -37,7 +38,7 @@ const dataProcessor = (inputs,key) => {
     //Zero index issue
     let exists = [...tabInfo.keys()].filter(item=>{
       console.log("teem",tabInfo[item],item,key);
-      // console.log("final",tabInfo[item][key])
+      // console.log(  "final",tabInfo[item][key])
       if(tabInfo[item][key]){
          return [item];
       }
@@ -61,6 +62,7 @@ const dataProcessor = (inputs,key) => {
   });
 };
 const ReloadInterval = (values, event) => {
+  console.log("haiii",values)
   timer = setInterval(() => {
     chrome.tabs.reload(values.tabId);
   }, values.timerValueMS * 1000);

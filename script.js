@@ -31,7 +31,7 @@ reloadStart.onclick = () => {
           },
           key: tab[0].url,
         };
-        chrome.runtime.sendMessage({ event: "onStart", values });
+        chrome.runtime.sendMessage({ event: "onStart", values,key:tab[0].url });
         timerStatus.style.display = "unset";
       }
     }
@@ -46,11 +46,15 @@ const starter = () => {
       async function (tab) {
         if (tab[0].id) {
           let storedTab = values.tabInfo.filter((item) => {
-            if (item[tab[0].url]) return true;
+            if (item && item[tab[0].url]) return true;
             return false;
           });
           console.log("Valless",storedTab);
+          console.log("Valless",storedTab.length);
+          console.log("Valless",storedTab[0]);
+
           if(storedTab.length === 1){
+            chrome.runtime.sendMessage({ event: "onStart",values:{ ...storedTab[0],key:tab[0].url} });
             timerStatus.style.display = "unset";
           }
 
